@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GeoInvest - Lista de Empresas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<style>
+  body { font-family: 'Manrope', sans-serif; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+  .animate-header { animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+</style>
+
+</head>
+<body class="bg-stone-50 text-stone-900 overflow-x-hidden">
+<header class="fixed top-0 w-full z-50 grid grid-cols-1 md:grid-cols-3 items-center px-4 md:px-8 h-auto md:h-24 py-3 md:py-0 bg-white/80 backdrop-blur-xl shadow-[0_20px_40px_rgba(26,28,28,0.04)] animate-header">
+  <div class="flex items-center justify-between md:justify-start">
+    <a href="index.html" class="w-12 h-12 md:w-16 md:h-16 rounded-lg md:rounded-xl overflow-hidden flex-shrink-0 bg-white block" aria-label="Ir a inicio">
+      <img src="LOGO_SIN_LETRAS.png" alt="GeoInvest Logo" class="w-full h-full object-cover"/>
+    </a>
+    <button class="md:hidden p-2 text-stone-600">
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+  </div>
+  <div class="hidden md:flex justify-center items-center">
+    <a href="index.html" class="text-3xl md:text-4xl font-black tracking-tighter text-[#9d3f00]" aria-label="Ir a inicio">GeoInvest</a>
+  </div>
+  <div class="flex items-center justify-end gap-2 md:gap-3">
+    <button class="p-2 text-stone-600 hover:bg-stone-100 transition-colors duration-300 rounded-full active:scale-95">
+      <span class="material-symbols-outlined text-lg md:text-xl">notifications</span>
+    </button>
+    <button class="p-2 text-stone-600 hover:bg-stone-100 transition-colors duration-300 rounded-full active:scale-95">
+      <span class="material-symbols-outlined text-lg md:text-xl">settings</span>
+    </button>
+  </div>
+</header>
+
+ <aside
+        class="fixed left-0 top-24 h-[calc(100vh-6rem)] w-64 md:w-72 p-4 md:p-6 z-40 border-r border-stone-200/60 bg-[#f9f9f8] font-['Manrope'] font-medium text-xs md:text-sm hidden md:flex flex-col">
+      <nav class="flex-1 space-y-2">
+            <a class="flex items-center gap-3 px-4 py-3 text-stone-500 hover:text-[#9d3f00] hover:bg-stone-200/50 transition-all active:translate-x-1"
+                href="index.html">
+                <span class="material-symbols-outlined">psychology</span>
+                <span>Inteligencia Artificial</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 bg-white text-[#9d3f00] shadow-sm rounded-lg transition-all active:translate-x-1"
+                href="lista_empresas.html" aria-current="page">
+                <span class="material-symbols-outlined">domain</span>
+                <span>Lista de Empresas</span>
+            </a>
+        </nav>
+
+        <div class="mt-auto pt-6 border-t border-stone-200/50 space-y-2">
+            <a class="flex items-center gap-3 px-4 py-3 text-stone-500 hover:text-[#9d3f00] transition-all"
+                href="#">
+                <span class="material-symbols-outlined">help</span>
+                <span>Ayuda</span>
+            </a>
+        </div>
+    </aside>
+
+
+<main class="max-w-7xl mx-auto px-3 md:px-6 md:pl-72 pt-24 md:pt-32 pb-6 md:pb-8">
+  <!-- Encabezado de sección -->
+  <div class="mb-6 md:mb-8">
+    <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-stone-900 mb-2 md:mb-4">
+      <span class="text-[#9d3f00]">Directorio</span> de Empresas
+    </h2>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-stone-900 mb-2 md:mb-4">
+      <span class="text-black text-base">**Empresas de Prototipo**</span>
+    </h2>
+  </div>
+
+  <!-- Sección de Filtros -->
+  <div class="bg-white rounded-lg md:rounded-xl border border-stone-200 p-4 md:p-6 shadow-sm mb-6 md:mb-8">
+    <div class="flex items-center gap-2 md:gap-3 mb-4">
+      <span class="material-symbols-outlined text-[#9d3f00]">filter_list</span>
+      <h3 class="text-base md:text-lg font-bold">Filtrar por Sector Empresarial</h3>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <button class="filtro-btn px-4 py-2 rounded-full bg-[#9d3f00] text-white font-semibold text-sm transition-all active:scale-95 hover:scale-105" data-filtro="todos">
+        Todos
+      </button>
+      <button class="filtro-btn px-4 py-2 rounded-full bg-stone-200 text-stone-700 font-semibold text-sm transition-all active:scale-95 hover:scale-105" data-filtro="Automotriz">
+        Automotriz
+      </button>
+      <button class="filtro-btn px-4 py-2 rounded-full bg-stone-200 text-stone-700 font-semibold text-sm transition-all active:scale-95 hover:scale-105" data-filtro="Aeroespacial">
+        Aeroespacial
+      </button>
+      <button class="filtro-btn px-4 py-2 rounded-full bg-stone-200 text-stone-700 font-semibold text-sm transition-all active:scale-95 hover:scale-105" data-filtro="Electrónica">
+        Electrónica
+      </button>
+      <button class="filtro-btn px-4 py-2 rounded-full bg-stone-200 text-stone-700 font-semibold text-sm transition-all active:scale-95 hover:scale-105" data-filtro="Dispositivos Médicos">
+        Dispositivos Médicos
+      </button>
+      <button class="filtro-btn px-4 py-2 rounded-full bg-stone-200 text-stone-700 font-semibold text-sm transition-all active:scale-95 hover:scale-105" data-filtro="Ciberseguridad">
+        Ciberseguridad
+      </button>
+      <button class="filtro-btn px-4 py-2 rounded-full bg-stone-200 text-stone-700 font-semibold text-sm transition-all active:scale-95 hover:scale-105" data-filtro="Telecomunicaciones">
+        Telecomunicaciones
+      </button>
+      <button class="filtro-btn px-4 py-2 rounded-full bg-stone-200 text-stone-700 font-semibold text-sm transition-all active:scale-95 hover:scale-105" data-filtro="Energía Solar">
+        Energía Solar
+      </button>
+      <button class="filtro-btn px-4 py-2 rounded-full bg-stone-200 text-stone-700 font-semibold text-sm transition-all active:scale-95 hover:scale-105" data-filtro="Logística">
+        Logística
+      </button>
+      <button class="filtro-btn px-4 py-2 rounded-full bg-stone-200 text-stone-700 font-semibold text-sm transition-all active:scale-95 hover:scale-105" data-filtro="Alimentos">
+        Alimentos
+      </button>
+    </div>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="mb-6 md:mb-8">
+    <p class="text-sm md:text-base text-stone-600">
+      Mostrando <span id="contador-empresas" class="font-bold text-[#9d3f00]">30</span> empresas
+    </p>
+  </div>
+
+  <!-- Grid de Empresas -->
+  <div id="empresas-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+  </div>
+
+</main>
+
+<script>
+// Base de datos de empresas de ejemplo
+const empresasDB = [
+  {
+    nombre: "Raytheon Technologies Tucson",
+    sector: "Aeroespacial",
+    ciudad: "Tucson, Arizona",
+    descripcion: "Desarrollo de sistemas de defensa y tecnologías aeroespaciales avanzadas",
+    empleados: "5000-10000",
+    imagen: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=200&h=200&auto=format&fit=crop",
+    probabilidad: 91
+  },
+  {
+    nombre: "Intel Chandler Campus",
+    sector: "Electrónica",
+    ciudad: "Chandler, Arizona",
+    descripcion: "Fabricación de semiconductores y microprocesadores de última generación",
+    empleados: "10000-20000",
+    imagen: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=200&h=200&auto=format&fit=crop",
+    probabilidad: 88
+  },
+  {
+    nombre: "Freeport-McMoRan",
+    sector: "Minería",
+    ciudad: "Phoenix, Arizona",
+    descripcion: "Extracción y procesamiento de cobre y metales industriales en el suroeste",
+    empleados: "3000-7000",
+    imagen: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=200&h=200&auto=format&fit=crop",
+    probabilidad: 79
+  },
+  {
+    nombre: "Honeywell Aerospace Phoenix",
+    sector: "Aeroespacial",
+    ciudad: "Phoenix, Arizona",
+    descripcion: "Manufactura de sistemas de aviónica y motores para aviación comercial",
+    empleados: "4000-8000",
+    imagen: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?q=80&w=200&h=200&auto=format&fit=crop",
+    probabilidad: 93
+  },
+  {
+    nombre: "Banner Health Systems",
+    sector: "Dispositivos Médicos",
+    ciudad: "Phoenix, Arizona",
+    descripcion: "Red hospitalaria líder con tecnología médica de vanguardia en el suroeste",
+    empleados: "30000-50000",
+    imagen: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=200&h=200&auto=format&fit=crop",
+    probabilidad: 85
+  },
+  {
+    nombre: "Nikola Motor Company",
+    sector: "Automotriz",
+    ciudad: "Phoenix, Arizona",
+    descripcion: "Desarrollo de vehículos de carga eléctricos e infraestructura de hidrógeno",
+    empleados: "1000-2500",
+    imagen: "https://images.unsplash.com/photo-1464207687429-7505649dae38?q=80&w=200&h=200&auto=format&fit=crop",
+    probabilidad: 80
+  },
+  {
+    nombre: "Arizona Public Service (APS)",
+    sector: "Energía Solar",
+    ciudad: "Tempe, Arizona",
+    descripcion: "Empresa de servicios eléctricos con gran inversión en energía solar utilitaria",
+    empleados: "6000-9000",
+    imagen: "https://images.unsplash.com/photo-1509391366360-2e938286db4c?q=80&w=200&h=200&auto=format&fit=crop",
+    probabilidad: 87
+  },
+  {
+    nombre: "CrowdStrike Tucson",
+    sector: "Ciberseguridad",
+    ciudad: "Tucson, Arizona",
+    descripcion: "Plataforma de ciberseguridad basada en IA para protección de endpoints",
+    empleados: "500-1500",
+    imagen: "https://web-assets.esetstatic.com/wls/2022/07/curso-online-ciberseguridad-empresas.jpg",
+    probabilidad: 92
+  },
+  {
+    nombre: "Farmers Investment Co.",
+    sector: "Alimentos",
+    ciudad: "Sahuarita, Arizona",
+    descripcion: "Cultivo y procesamiento de nuez pecana y productos agrícolas de exportación",
+    empleados: "500-1000",
+    imagen: "https://images.unsplash.com/photo-1488459716781-6815394dc4f5?q=80&w=200&h=200&auto=format&fit=crop",
+    probabilidad: 76
+  },
+  {
+    nombre: "Swift Transportation",
+    sector: "Logística",
+    ciudad: "Phoenix, Arizona",
+    descripcion: "Operadora de transporte de carga líder en rutas transfronterizas México-EE.UU.",
+    empleados: "20000-30000",
+    imagen: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?q=80&w=200&h=200&auto=format&fit=crop",
+    probabilidad: 83
+  },
+  {
+    nombre: "Cox Communications Arizona",
+    sector: "Telecomunicaciones",
+    ciudad: "Scottsdale, Arizona",
+    descripcion: "Proveedor de servicios de internet, televisión y telecomunicaciones empresariales",
+    empleados: "8000-15000",
+    imagen: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=200&h=200&auto=format&fit=crop",
+    probabilidad: 78
+  },
+  {
+    nombre: "First Solar",
+    sector: "Energía Solar",
+    ciudad: "Tempe, Arizona",
+    descripcion: "Fabricante líder mundial de paneles solares de telururo de cadmio",
+    empleados: "5000-9000",
+    imagen: "https://images.unsplash.com/photo-1523821741446-edb429f67505?q=80&w=200&h=200&auto=format&fit=crop",
+    probabilidad: 94
+  },
+  {
+    nombre: "Benchmark Electronics Nogales",
+    sector: "Electrónica",
+    ciudad: "Nogales, Arizona",
+    descripcion: "Manufactura y ensamble de soluciones electrónicas para industria médica y defensa",
+    empleados: "800-1500",
+    imagen: "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?q=80&w=200&h=200&auto=format&fit=crop",
+    probabilidad: 86
+  },
+  {
+    nombre: "Tucson Medical Center",
+    sector: "Dispositivos Médicos",
+    ciudad: "Tucson, Arizona",
+    descripcion: "Centro médico regional con unidad de innovación en dispositivos clínicos",
+    empleados: "3000-6000",
+    imagen: "https://images.unsplash.com/photo-1576091160688-112696292c7d?q=80&w=200&h=200&auto=format&fit=crop",
+    probabilidad: 82
+  },
+  {
+    nombre: "ON Semiconductor",
+    sector: "Electrónica",
+    ciudad: "Scottsdale, Arizona",
+    descripcion: "Diseño y manufactura de semiconductores para automoción y energía inteligente",
+    empleados: "10000-18000",
+    imagen: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=200&h=200&auto=format&fit=crop",
+    probabilidad: 89
+  },
+];
+
+// Función para crear tarjeta de empresa
+function crearTarjetaEmpresa(empresa) {
+  const probabilidad = Number.isFinite(empresa.probabilidad)
+    ? empresa.probabilidad
+    : Math.floor(Math.random() * (92 - 73 + 1) + 73);
+
+  return `
+    <article class="bg-white rounded-lg md:rounded-xl border border-stone-200 p-4 md:p-6 shadow-sm fade-up hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+      <div class="flex items-start justify-between gap-3 md:gap-4 border-b border-stone-100 pb-3 md:pb-4 mb-3 md:mb-4 flex-wrap">
+        <div class="flex items-center gap-2 md:gap-4 flex-1 min-w-0">
+          <div class="w-12 h-12 md:w-16 md:h-16 rounded-lg md:rounded-xl border border-orange-200 shadow-sm overflow-hidden flex-shrink-0 bg-stone-50">
+            <img src="${empresa.imagen}" alt="Logo de ${empresa.nombre}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"/>
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-stone-400">${empresa.sector}</p>
+            <h3 class="text-lg md:text-2xl font-black text-[#9d3f00] leading-tight md:leading-none mt-1 tracking-tight break-words">${empresa.nombre}</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-2 md:space-y-3 mb-3 md:mb-4">
+        <div class="bg-stone-50/70 rounded-lg p-2 md:p-3 border border-stone-100">
+          <p class="text-[9px] md:text-[10px] uppercase tracking-widest font-bold text-stone-500 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[12px] md:text-[14px]">location_on</span>
+            Ubicación
+          </p>
+          <p class="mt-1 text-stone-700 leading-relaxed font-medium text-xs md:text-sm">${empresa.ciudad}</p>
+        </div>
+
+        <div class="bg-stone-50/70 rounded-lg p-2 md:p-3 border border-stone-100">
+          <p class="text-[9px] md:text-[10px] uppercase tracking-widest font-bold text-stone-500 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[12px] md:text-[14px]">description</span>
+            Descripción
+          </p>
+          <p class="mt-1 text-stone-700 leading-relaxed font-medium text-xs md:text-sm">${empresa.descripcion}</p>
+        </div>
+
+        <div class="bg-stone-50/70 rounded-lg p-2 md:p-3 border border-stone-100">
+          <p class="text-[9px] md:text-[10px] uppercase tracking-widest font-bold text-stone-500 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[12px] md:text-[14px]">groups</span>
+            Empleados
+          </p>
+          <p class="mt-1 text-stone-700 leading-relaxed font-medium text-xs md:text-sm">${empresa.empleados}</p>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+// Función para renderizar empresas con filtro
+function renderizarEmpresas(filtro = 'todos') {
+  const grid = document.getElementById('empresas-grid');
+  grid.innerHTML = '';
+
+  let empresasFiltradas = empresasDB;
+  if (filtro !== 'todos') {
+    empresasFiltradas = empresasDB.filter(e => e.sector === filtro);
+  }
+
+  empresasFiltradas.forEach((empresa, index) => {
+    const html = crearTarjetaEmpresa(empresa);
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    div.style.animationDelay = `${index * 50}ms`;
+    grid.appendChild(div.firstElementChild);
+  });
+
+  // Actualizar contador
+  document.getElementById('contador-empresas').textContent = empresasFiltradas.length;
+}
+
+// Event listeners para filtros
+document.addEventListener('DOMContentLoaded', function() {
+  const botonesFiltro = document.querySelectorAll('.filtro-btn');
+
+  botonesFiltro.forEach(btn => {
+    btn.addEventListener('click', function() {
+      // Remover clase activa de todos
+      botonesFiltro.forEach(b => {
+        b.classList.remove('bg-[#9d3f00]', 'text-white');
+        b.classList.add('bg-stone-200', 'text-stone-700');
+      });
+
+      // Agregar clase activa al botón clickeado
+      this.classList.remove('bg-stone-200', 'text-stone-700');
+      this.classList.add('bg-[#9d3f00]', 'text-white');
+
+      // Renderizar empresas con el filtro
+      const filtro = this.getAttribute('data-filtro');
+      renderizarEmpresas(filtro);
+    });
+  });
+
+  // Renderizar todas las empresas al cargar
+  renderizarEmpresas('todos');
+});
+</script>
+
+</body>
+</html>
+
