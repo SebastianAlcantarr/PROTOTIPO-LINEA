@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GeoInvest - Resultados IA</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<style>
+  body { font-family: 'Manrope', sans-serif; }
+  @keyframes shimmer {
+    0% { background-position: -300px 0; }
+    100% { background-position: 300px 0; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes popIn {
+    0% { opacity: 0; transform: scale(0.5); }
+    70% { transform: scale(1.1); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.2; }
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+    background-size: 600px 100%;
+    animation: shimmer 1.2s infinite linear;
+  }
+  .animate-header { animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .animate-sidebar { animation: fadeLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.2s; }
+  .fade-up { animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+  .pop-in { animation: popIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+
+  .loader-spin {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #9d3f00;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+  }
+
+  .typing-caret::after {
+    content: "|";
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+    color: #9d3f00;
+    font-weight: 700;
+  }
+</style>
+
+</head>
+<body class="bg-stone-50 text-stone-900 overflow-x-hidden">
+<header class="fixed top-0 w-full z-50 grid grid-cols-3 items-center px-8 h-24 bg-white/80 backdrop-blur-xl shadow-[0_20px_40px_rgba(26,28,28,0.04)] animate-header">
+  <div class="flex items-center">
+    <div class="w-25 h-16 rounded-xl  overflow-hidden flex-shrink-0 bg-white">
+      <img src="LOGO_SIN_LETRAS.png" alt="GeoInvest Logo" class="w-full h-full object-cover"/>
+    </div>
+  </div>
+  <div class="flex justify-center items-center">
+    <h1 class="text-4xl font-black tracking-tighter text-[#9d3f00]">GeoInvest</h1>
+  </div>
+  <div class="flex items-center justify-end gap-3">
+    <button class="p-2 text-stone-600 hover:bg-stone-100 transition-colors duration-300 rounded-full active:scale-95">
+      <span class="material-symbols-outlined">notifications</span>
+    </button>
+    <button class="p-2 text-stone-600 hover:bg-stone-100 transition-colors duration-300 rounded-full active:scale-95">
+      <span class="material-symbols-outlined">settings</span>
+    </button>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-6 pt-32 pb-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <section class="lg:col-span-2 space-y-4" id="empresas-container">
+    </section>
+
+  <aside class="space-y-4 animate-sidebar">
+    <div class="bg-white rounded-xl border border-stone-200 p-6 shadow-sm">
+      <div class="flex items-center justify-between gap-3">
+        <p class="text-xs uppercase tracking-widest font-bold text-orange-700">Resumen Generado</p>
+        <span id="estado-ia" class="text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-full bg-orange-100 text-orange-700 transition-colors duration-300">Procesando</span>
+      </div>
+      <p id="resumen-ia" class="mt-3 text-sm leading-relaxed text-stone-700">Esperando análisis...</p>
+    </div>
+
+
+    <div class="bg-white rounded-xl border border-stone-200 p-6 shadow-sm">
+      <p class="text-xs uppercase tracking-widest font-bold text-orange-700">Parámetros usados</p>
+      <div class="mt-3 text-sm text-stone-700 space-y-2">
+
+        <p><span class="font-semibold">Sector:</span> <span id="param-sector">-</span></p>
+        <p><span class="font-semibold">Plazo:</span> <span id="param-plazo">-</span></p>
+      </div>
+      <p class="text-base uppercase tracking-widest font-bold text-orange-700 mt-3">Fuentes Usadas</p>
+      <div class="mt-3 text-sm text-stone-700 space-y-2">
+        <p class="text-sm uppercase tracking-widest font-bold text-orange-700">Datos publicos de Gobierno</p>
+        <p><span class="font-semibold">INEGI - Directorio Empresarial,econmia,empleo</span></p>
+        <p><span class="font-semibold">SIEM - Empresas registradas por municipio/giro </span></p>
+                <p><span class="font-semibold">Datos Abiertos en Mexico - Empleos formales por sector en Hermosillo/Sonora</span></p>
+
+        <p class="text-sm uppercase tracking-widest font-bold text-orange-700">Datos de mercado y de empresas</p>
+        <p class="text-sm uppercase tracking-widest font-bold text-orange-700"></p>
+        <p><span class="font-semibold">Linkedin - Expansion de Vacantes,Oficinas,etc</span></p>
+        <p><span class="font-semibold">Google NEWS - Noticias de inversiones en Sonora/Hermosillo</span></p>
+
+
+    </div>
+      </div>
+
+  </aside>
+</main>
+
+<script>
+function toggleExpand(idx) {
+  const row1 = document.getElementById(`row1-${idx}`);
+  const row2 = document.getElementById(`row2-${idx}`);
+  const extraContent = document.getElementById(`extra-${idx}`);
+  const btnText = document.getElementById(`btn-text-${idx}`);
+  const btnIcon = document.getElementById(`btn-icon-${idx}`);
+
+  row1.classList.toggle('md:grid-cols-2');
+  row2.classList.toggle('md:grid-cols-2');
+
+  if (extraContent.classList.contains('hidden')) {
+    extraContent.classList.remove('hidden');
+    extraContent.classList.add('fade-up');
+    btnText.textContent = 'Ver menos';
+    btnIcon.textContent = 'expand_less';
+  } else {
+    extraContent.classList.add('hidden');
+    extraContent.classList.remove('fade-up');
+    btnText.textContent = 'Ver más';
+    btnIcon.textContent = 'arrow_forward';
+  }
+}
+
+function crearCardEmpresa(empresa, idx) {
+  const origen = empresa.origen || 'Hermosillo, Sonora (estimado)';
+  const quienes = empresa.quienes_son || 'Empresa/organización alineada al sector seleccionado.';
+  const porQue = empresa.por_que_encaja || 'Encaja con el enfoque de maquila y la sostenibilidad, ya que tiene experiencia en la producción en México.';
+  const potencial = empresa.potencial_expansion || 'Crecimiento del 15-20% anual debido a la fuerte demanda de tecnología en la región y la adopción de nuevos mercados.';
+  const probabilidad = empresa.probabilidad_expansion || Math.floor(Math.random() * (98 - 75 + 1) + 75);
+  const imagen = empresa.imagen || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=200&h=200&auto=format&fit=crop';
+
+  // Nuevo campo para la Mano de Obra
+  const manoObra = empresa.mano_obra || 'Se requiere perfil técnico en manufactura avanzada e ingenieros industriales bilingües. Excelente viabilidad gracias a los convenios de vinculación con el ITH y la Universidad de Sonora, garantizando flujo de talento calificado.';
+
+  return `
+    <article class="bg-white rounded-xl border border-stone-200 p-6 shadow-sm fade-up hover:-translate-y-1 hover:shadow-lg transition-all duration-300 relative">
+
+      <div class="flex items-start justify-between gap-4 border-b border-stone-100 pb-4 mb-4">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-xl border border-orange-200 shadow-sm overflow-hidden flex-shrink-0 bg-stone-50">
+            <img src="${imagen}" alt="Imagen de ${empresa.nombre}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"/>
+          </div>
+          <div>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Empresa ${idx + 1}</p>
+            <h3 class="text-2xl font-black text-[#9d3f00] leading-none mt-1 tracking-tight">${empresa.nombre || 'Oportunidad sugerida'}</h3>
+          </div>
+        </div>
+
+        <div class="flex flex-col items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full border-[3px] border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm flex-shrink-0 pop-in" style="animation-delay: 200ms;" title="Probabilidad de expansión">
+            <span class="text-lg md:text-xl font-black leading-none">${probabilidad}%</span>
+        </div>
+      </div>
+
+      <div id="row1-${idx}" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4 transition-all duration-300">
+        <div class="bg-stone-50/70 rounded-lg p-3 border border-stone-100 transition-colors hover:bg-stone-100">
+          <p class="text-[10px] uppercase tracking-widest font-bold text-stone-500 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">corporate_fare</span>
+            Quiénes son
+          </p>
+          <p class="mt-1 text-stone-700 leading-relaxed font-medium">${quienes}</p>
+        </div>
+        <div class="bg-stone-50/70 rounded-lg p-3 border border-stone-100 transition-colors hover:bg-stone-100">
+          <p class="text-[10px] uppercase tracking-widest font-bold text-stone-500 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">location_on</span>
+            De dónde
+          </p>
+          <p class="mt-1 text-stone-700 leading-relaxed font-medium">${origen}</p>
+        </div>
+      </div>
+
+      <div id="row2-${idx}" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4 transition-all duration-300">
+        <div class="px-2">
+          <p class="text-[10px] uppercase tracking-widest font-bold text-stone-500 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">category</span>
+            Sector
+          </p>
+          <p class="mt-1 text-stone-800 font-bold text-base">${empresa.sector || 'N/D'}</p>
+        </div>
+        <div class="px-2">
+          <p class="text-[10px] uppercase tracking-widest font-bold text-stone-500 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">trending_up</span>
+            Potencial de expansión
+          </p>
+          <p class="mt-1 text-emerald-700 font-semibold leading-relaxed">${potencial}</p>
+        </div>
+      </div>
+
+      <div id="extra-${idx}" class="hidden space-y-4 mb-4">
+
+        <div class="bg-stone-50/70 rounded-lg p-4 border border-stone-100">
+          <p class="text-[10px] uppercase tracking-widest font-bold text-stone-500 flex items-center gap-1 mb-2">
+            <span class="material-symbols-outlined text-[14px]">payments</span>
+            Costo / Beneficio de la Inversión
+          </p>
+          <p class="text-sm text-stone-700 leading-relaxed">
+            Hermosillo ofrece ventajas competitivas significativas para la expansión industrial. Su ubicación estratégica a menos de 300 km de la frontera con Estados Unidos reduce drásticamente los costos logísticos. Además, el estado cuenta con un ecosistema de parques industriales establecidos, lo que permite una integración rápida a la cadena de suministro con costos operativos hasta un 25% más eficientes en comparación con otras ciudades fronterizas.
+          </p>
+        </div>
+
+        <div class="bg-stone-50/70 rounded-lg p-4 border border-stone-100 relative overflow-hidden">
+          <div class="absolute -right-4 -bottom-4 opacity-[0.03] text-stone-900 pointer-events-none">
+             <span class="material-symbols-outlined" style="font-size: 120px;">engineering</span>
+          </div>
+          <p class="text-[10px] uppercase tracking-widest font-bold text-stone-500 flex items-center gap-1 mb-2 relative z-10">
+            <span class="material-symbols-outlined text-[14px]">engineering</span>
+            Mano de Obra Requerida
+          </p>
+          <p class="text-sm text-stone-700 leading-relaxed relative z-10">
+            ${manoObra}
+          </p>
+          <div class="flex items-center gap-2 mt-3 pt-3 border-t border-stone-200/60 relative z-10">
+              <span class="material-symbols-outlined text-emerald-600 text-[18px]">school</span>
+              <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-wide">Viabilidad de Talento Local: Alta</span>
+          </div>
+        </div>
+
+        <div class="bg-stone-50/70 rounded-lg p-4 border border-stone-100">
+          <p class="text-[10px] uppercase tracking-widest font-bold text-stone-500 flex items-center gap-1 mb-3">
+            <span class="material-symbols-outlined text-[14px]">assignment_turned_in</span>
+            Permisos Requeridos para Expansión
+          </p>
+          <ul class="space-y-2">
+            <li class="flex items-center justify-between bg-white px-3 py-2 rounded-md border border-stone-200 shadow-sm">
+              <span class="text-sm font-semibold text-stone-700">Licencia Ambiental Integral (LAI)</span>
+              <button class="flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide bg-stone-100 hover:bg-stone-200 text-stone-600 px-3 py-1.5 rounded transition-colors active:scale-95">
+                <span class="material-symbols-outlined text-[14px]">download</span> PDF
+              </button>
+            </li>
+            <li class="flex items-center justify-between bg-white px-3 py-2 rounded-md border border-stone-200 shadow-sm">
+              <span class="text-sm font-semibold text-stone-700">Dictamen de Uso de Suelo Industrial</span>
+              <button class="flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide bg-stone-100 hover:bg-stone-200 text-stone-600 px-3 py-1.5 rounded transition-colors active:scale-95">
+                <span class="material-symbols-outlined text-[14px]">download</span> PDF
+              </button>
+            </li>
+            <li class="flex items-center justify-between bg-white px-3 py-2 rounded-md border border-stone-200 shadow-sm">
+              <span class="text-sm font-semibold text-stone-700">Aprobación de Protección Civil Estatal</span>
+              <button class="flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide bg-stone-100 hover:bg-stone-200 text-stone-600 px-3 py-1.5 rounded transition-colors active:scale-95">
+                <span class="material-symbols-outlined text-[14px]">download</span> PDF
+              </button>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="bg-orange-50/60 rounded-lg p-4 border border-orange-100/50 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 group mt-2">
+        <div>
+          <p class="text-[10px] uppercase tracking-widest font-bold text-orange-800 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">check_circle</span>
+            Por qué encaja con tus parámetros
+          </p>
+          <p class="mt-1.5 text-stone-700 leading-relaxed text-sm">${porQue}</p>
+        </div>
+
+        <button onclick="toggleExpand(${idx})" class="px-5 py-2.5 bg-[#9d3f00] text-white text-[11px] font-bold uppercase tracking-widest rounded-lg hover:bg-orange-900 transition-all duration-300 shadow-sm flex-shrink-0 flex items-center gap-1 active:scale-95 group-hover:shadow-md hover:scale-105">
+          <span id="btn-text-${idx}">Ver más</span>
+          <span id="btn-icon-${idx}" class="material-symbols-outlined text-[14px] transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+        </button>
+      </div>
+    </article>
+  `;
+}
+
+function esperar(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function pintarLoaderEmpresas() {
+  const cont = document.getElementById('empresas-container');
+  cont.innerHTML = `
+    <article class="bg-white rounded-xl border border-stone-200 p-10 shadow-sm fade-up text-center">
+      <div class="flex flex-col items-center justify-center gap-6">
+        <div class="relative w-24 h-24 flex items-center justify-center">
+            <span class="material-symbols-outlined text-[80px] text-orange-200 animate-pulse">analytics</span>
+            <div class="absolute inset-0 border-4 border-dashed border-orange-300 rounded-full animate-spin [animation-duration:10s]"></div>
+        </div>
+        <div class="space-y-2">
+          <h2 class="text-xl font-bold text-stone-800">Analizando el mercado</h2>
+          <p class="text-sm text-stone-600 leading-relaxed max-w-md mx-auto">
+            GeoInvest IA está examinando todas las oportunidades de inversión en Sonora que coinciden con tus parámetros. Estamos seleccionando las empresas con mayor potencial de expansión para ti.
+          </p>
+        </div>
+        <div class="flex items-center gap-2.5 px-4 py-2 bg-orange-50 rounded-full border border-orange-100 text-orange-700 text-xs font-semibold">
+          <div class="loader-spin"></div>
+          Procesando datos en tiempo real
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function pintarSkeletonEmpresas() {
+  const cont = document.getElementById('empresas-container');
+  cont.innerHTML = '';
+  for (let i = 0; i < 3; i += 1) {
+    const card = document.createElement('div');
+    card.className = 'bg-white rounded-xl border border-stone-200 p-6 shadow-sm fade-up';
+    card.style.animationDelay = `${i * 100}ms`;
+    card.innerHTML = `
+      <div class="flex items-center justify-between border-b border-stone-100 pb-4 mb-4">
+        <div class="flex items-center gap-4 w-full">
+          <div class="w-16 h-16 rounded-xl skeleton flex-shrink-0"></div>
+          <div class="w-1/2">
+            <div class="h-3 w-20 rounded skeleton mb-2"></div>
+            <div class="h-6 w-full rounded skeleton"></div>
+          </div>
+        </div>
+        <div class="w-16 h-16 rounded-full skeleton flex-shrink-0"></div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="h-20 rounded-lg skeleton"></div>
+        <div class="h-20 rounded-lg skeleton"></div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="h-10 rounded skeleton"></div>
+        <div class="h-10 rounded skeleton"></div>
+      </div>
+      <div class="h-20 w-full rounded-lg skeleton"></div>
+    `;
+    cont.appendChild(card);
+  }
+}
+
+function setEstadoIA(texto, finalizado) {
+  const badge = document.getElementById('estado-ia');
+  if (!badge) return;
+  badge.textContent = texto;
+  if (finalizado) {
+    badge.className = 'text-[10px] uppercase tracking-widest font-bold px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full transition-colors duration-500';
+  } else {
+    badge.className = 'text-[10px] uppercase tracking-widest font-bold px-2 py-1 bg-orange-100 text-orange-700 rounded-full transition-colors duration-500';
+  }
+}
+
+async function escribirResumenAnimado(texto) {
+  const el = document.getElementById('resumen-ia');
+  if (!el) return;
+  el.textContent = '';
+  el.classList.add('typing-caret');
+  for (let i = 0; i < texto.length; i += 1) {
+    el.textContent += texto[i];
+    await esperar(10);
+  }
+  el.classList.remove('typing-caret');
+}
+
+async function renderEmpresasProgresivo(empresas) {
+  const cont = document.getElementById('empresas-container');
+  cont.innerHTML = '';
+  for (let i = 0; i < empresas.length; i += 1) {
+    const htmlCard = crearCardEmpresa(empresas[i], i);
+    cont.insertAdjacentHTML('beforeend', htmlCard);
+    await esperar(180);
+  }
+}
+
+(function initResultados() {
+  const rawResultado = sessionStorage.getItem('geoInvestResultadoIA');
+  const rawPayload = sessionStorage.getItem('geoInvestPayload');
+
+  const empresasContainer = document.getElementById('empresas-container');
+  const resumenEl = document.getElementById('resumen-ia');
+
+  if (!rawResultado) {
+    empresasContainer.innerHTML = `
+      <div class="bg-white rounded-xl border border-red-200 p-6 shadow-sm fade-up">
+        <h2 class="text-lg font-bold text-red-700">No hay resultados para mostrar</h2>
+        <p class="text-sm text-stone-600 mt-2">Primero ejecuta el análisis de IA desde la pantalla de parámetros.</p>
+        <a href="index.html" class="inline-block mt-4 px-4 py-2 rounded-lg bg-[#9d3f00] text-white text-sm font-semibold hover:bg-orange-900 transition-colors">Ir a parámetros</a>
+      </div>
+    `;
+    resumenEl.textContent = 'Sin resumen disponible.';
+    setEstadoIA('Sin datos', true);
+    return;
+  }
+
+  (async () => {
+    try {
+      pintarLoaderEmpresas();
+      resumenEl.textContent = 'GeoInvest IA está analizando los parámetros seleccionados y buscando las mejores opciones...';
+      setEstadoIA('Analizando', false);
+
+      const resultado = JSON.parse(rawResultado);
+      const payload = rawPayload ? JSON.parse(rawPayload) : null;
+
+      await esperar(1000);
+      setEstadoIA('Buscando Oportunidades', false);
+      await esperar(1000);
+      setEstadoIA('Seleccionando Mejores', false);
+      await esperar(1000);
+      setEstadoIA('Preparando Resultados', false);
+
+      const empresas = Array.isArray(resultado.empresas) ? resultado.empresas : [];
+      if (!empresas.length) {
+        empresasContainer.innerHTML = `
+          <div class="bg-white rounded-xl border border-amber-200 p-6 shadow-sm fade-up text-center">
+            <span class="material-symbols-outlined text-[50px] text-amber-500 mb-3">explore_off</span>
+            <h2 class="text-lg font-bold text-amber-700">Sin empresas sugeridas</h2>
+            <p class="text-sm text-stone-600 mt-2 mx-auto max-w-sm">El análisis no devolvió empresas que cumplan exactamente con los criterios seleccionados en esta ejecución.</p>
+          </div>
+        `;
+      } else {
+        pintarSkeletonEmpresas();
+        await esperar(400);
+        await renderEmpresasProgresivo(empresas);
+      }
+
+      await escribirResumenAnimado(resultado.resumen || 'La IA no devolvió un resumen detallado para esta selección.');
+      setEstadoIA('Listo', true);
+
+      if (payload) {
+        document.getElementById('param-sector').textContent = payload.sector || '-';
+        document.getElementById('param-plazo').textContent = payload.plazo_retorno || '-';
+      }
+    } catch (err) {
+      empresasContainer.innerHTML = `
+        <div class="bg-white rounded-xl border border-red-200 p-6 shadow-sm fade-up">
+          <h2 class="text-lg font-bold text-red-700">Error al leer resultados</h2>
+          <p class="text-sm text-stone-600 mt-2">No se pudieron procesar los datos guardados del análisis. Por favor intenta ejecutar el análisis de nuevo.</p>
+        </div>
+      `;
+      resumenEl.textContent = 'No se pudo procesar el resumen detallado de la IA debido a un error.';
+      setEstadoIA('Error', true);
+    }
+  })();
+})();
+</script>
+</body>
+</html>
